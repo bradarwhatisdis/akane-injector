@@ -36,7 +36,7 @@ jobs:
       - name: Install Android NDK r26
         run: |
           NDK_VERSION="26.3.11579264"
-          NDK_DIR="${{ runner.workspace }}/ndk/${NDK_VERSION}"
+          NDK_DIR="${{ runner.workspace }}/ndk/android-ndk-r26d"
           mkdir -p "${{ runner.workspace }}/ndk"
           wget -q "https://dl.google.com/android/repository/android-ndk-r26d-linux.zip" -O /tmp/ndk.zip
           unzip -q /tmp/ndk.zip -d "${{ runner.workspace }}/ndk"

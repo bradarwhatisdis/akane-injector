@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    # Tambahkan baris di bawah ini agar workflow aktif saat push tag v*
+    tags:
+      - 'v*'
     paths:
       - 'module/**'
       - 'injector/**'
@@ -62,7 +65,7 @@ jobs:
           file out/injector/libs/${{ env.ABI }}/akane-injector
           file out/injector/libs/${{ env.ABI }}/libakane-runtime.so
 
-      - name: Upload artifacts
+      - name: Upload artifacts to workflow
         uses: actions/upload-artifact@v4
         with:
           name: akane-injector-android12-5.10-${{ env.ABI }}
@@ -71,7 +74,7 @@ jobs:
             out/injector/libs/${{ env.ABI }}/libakane-runtime.so
           retention-days: 30
 
-      - name: Upload kernel module
+      - name: Upload kernel module to workflow
         uses: actions/upload-artifact@v4
         with:
           name: akane-ko-android12-5.10
@@ -90,12 +93,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+          merge-multiple: true # Memudahkan pencarian file tanpa struktur folder ganda
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/akane-injector-android12-5.10-arm64-v8a/akane-injector
-            artifacts/akane-injector-android12-5.10-arm64-v8a/libakane-runtime.so
-            artifacts/akane-ko-android12-5.10/akane.ko
+            artifacts/akane-injector
+            artifacts/libakane-runtime.so
+            artifacts/akane.ko
           generate_release_notes: true
